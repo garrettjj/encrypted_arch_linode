@@ -246,7 +246,7 @@ sysstat
 strace
 nmap
 wget
-screen
+tmux
 dnsutils
 tcpdump
 clamav
@@ -310,11 +310,10 @@ echo "~ Populate /etc/resolv.conf"
 # if this is done *inside* the chroot, it sets the resolv.conf for the host system
 # (ie, finnix)
 cat > /mnt/arch-root/etc/resolv.conf << RESOLV_EOF
-# Google DNS ftw
-nameserver 8.8.8.8
-nameserver 8.8.4.4
-nameserver 2001:4860:4860::8888
-nameserver 2001:4860:4860::8844
+# Quad 9
+nameserver 9.9.9.9
+nameserver 149.112.112.112
+nameserver 2620:fe::fe
 
 RESOLV_EOF
 
