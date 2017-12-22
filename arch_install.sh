@@ -413,6 +413,13 @@ nameserver 2620:fe::fe
 
 RESOLV_EOF
 
+echo "~ Updating Pacman repos"
+echo >> /etc/pacman.conf << PACMAN_EOF
+[archstrike]
+Server = https://mirror.archstrike.org/$arch/$repo
+
+PACMAN_EOF
+
 exit
 ARCH_STRAP_EOF
 
