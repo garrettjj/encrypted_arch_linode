@@ -245,7 +245,6 @@ sysstat
 strace
 nmap
 wget
-curl
 tmux
 dnsutils
 tcpdump
@@ -288,7 +287,6 @@ chmod 600 "/home/$USERNAME/.ssh/authorized_keys"
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
 cat > "/home/$USERNAME/.zshrc" << ZSH_CONFIG_EOF
-
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
