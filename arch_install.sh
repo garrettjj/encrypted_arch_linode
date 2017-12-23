@@ -231,6 +231,26 @@ ln -s ../grub .
 # Silly stuff
 sed -i '/\# Misc options/a ILoveCandy' /etc/pacman.conf
 
+# Install ArchStrike repo
+echo '
+# ArchStrike Security
+[archstrike]
+Server = https://mirror.archstrike.org/$arch/$repo' >> /etc/pacman.conf
+
+pacman -Syy
+
+pacman-key --init
+dirmngr < /dev/null
+pacman-key -r 9D5F1C051D146843CDA4858BDE64825E7CBC0D51
+pacman-key --lsign-key 9D5F1C051D146843CDA4858BDE64825E7CBC0D51
+
+pacman -S archstrike-keyring --noconfirm
+pacman -S archstrike-mirrorlist --noconfirm
+
+sed -i 's,Server = https://mirror.archstrike.org/$arch/$repo,Include = /etc/pacman.d/archstrike-mirrorlist,g' /etc/pacman.conf
+
+pacman -Syy
+
 # make sure there are at least some default packages
 echo "~ Updating system and installing some default packages"
 pacman -Syyu --noconfirm
@@ -254,17 +274,7 @@ ufw
 salt
 PKG_LIST_EOF
 
-# install pacaur
-# https://github.com/rmarquis/pacaur
-# Switching to yay
-echo "~ Setting up pacaur \$now"
-#pacman -S --noconfirm expac yajl
-#if [ ! -n "$(pacman -Qs cower)" ]; then
-#  echo "~ Building cower"
-#  curl -sL -o /tmp/PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=cower
-#  su "$USERNAME" --login -s /bin/bash -c 'cd /tmp && makepkg PKGBUILD --skippgpcheck --needed --noconfirm'
-#  pacman -U /tmp/cower*.pkg.tar.xz --noconfirm
-#fi
+# install yay
 if [ ! -n "$(pacman -Qs yay)" ]; then
   echo "~ Building yay"
   curl -sL -o /tmp/PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=yay
@@ -286,27 +296,14 @@ echo "$SSHKEY" >> "/home/$USERNAME/.ssh/authorized_keys"
 chmod -R 700 "/home/$USERNAME/.ssh"
 chmod 600 "/home/$USERNAME/.ssh/authorized_keys"
 
-echo "installing oh-my-zsh"
-if [ ! -n "$(pacman -Qs oh-my-zsh-git)" ]; then
-  echo "~ Building oh-my-zsh"
-  curl -sL -o /tmp/PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=oh-my-zsh-git
-  su "$USERNAME" --login -s /bin/bash -c 'cd /tmp && makepkg PKGBUILD --needed --noconfirm'
-  pacman -U /tmp/oh-my-zsh-git*.pkg.tar.xz --noconfirm
-fi
-
 cat > "/home/$USERNAME/.zshrc" << ZSH_CONFIG_EOF
-export ZSH=/home/garrett/.oh-my-zsh
-ZSH_THEME="clean"
-plugins=(
-  git
-)
-source $ZSH/oh-my-zsh.sh
 autoload -Uz promptinit
 promptinit
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 autoload predict-on
-export EDITOR=vim
-eval $(thefuck --alias)
+
+# build prompt
+PROMPT="%F{magenta}%n@%m%f:%F{cyan}%~%f %F{green}%(!.=>.->)%f "
 
 ZSH_CONFIG_EOF
 
