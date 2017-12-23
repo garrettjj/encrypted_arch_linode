@@ -231,25 +231,25 @@ ln -s ../grub .
 # Silly stuff
 sed -i '/\# Misc options/a ILoveCandy' /etc/pacman.conf
 
-# Install ArchStrike repo
-echo '
+# Install ArchStrike repo --- Commented out while determining what's broken lol
+#echo '
 # ArchStrike Security
-[archstrike]
-Server = https://mirror.archstrike.org/$arch/$repo' >> /etc/pacman.conf
+#[archstrike]
+#Server = https://mirror.archstrike.org/$arch/$repo' >> /etc/pacman.conf
 
-pacman -Syy
+#pacman -Syy
 
-pacman-key --init
-dirmngr < /dev/null
-pacman-key -r 9D5F1C051D146843CDA4858BDE64825E7CBC0D51
-pacman-key --lsign-key 9D5F1C051D146843CDA4858BDE64825E7CBC0D51
+#pacman-key --init
+#dirmngr < /dev/null
+#pacman-key -r 9D5F1C051D146843CDA4858BDE64825E7CBC0D51
+#pacman-key --lsign-key 9D5F1C051D146843CDA4858BDE64825E7CBC0D51
 
-pacman -S archstrike-keyring --noconfirm
-pacman -S archstrike-mirrorlist --noconfirm
+#pacman -S archstrike-keyring --noconfirm
+#pacman -S archstrike-mirrorlist --noconfirm
 
-sed -i 's,Server = https://mirror.archstrike.org/$arch/$repo,Include = /etc/pacman.d/archstrike-mirrorlist,g' /etc/pacman.conf
+#sed -i 's,Server = https://mirror.archstrike.org/$arch/$repo,Include = /etc/pacman.d/archstrike-mirrorlist,g' /etc/pacman.conf
 
-pacman -Syy
+#pacman -Syy
 
 # make sure there are at least some default packages
 echo "~ Updating system and installing some default packages"
